@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>WhatsApp Chat</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			font-family: Arial, sans-serif;
+			background-color: #92c0ee;
+		}
+		.chat-container {
+			max-width: 450px;
+			margin: 0 auto; margin-top: 2.5ch;
+			padding: 20px;
+			background-color:white;
+			box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
+			height: calc(100vh - 80px);
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-end;
+			position: relative;
+		}
+		.chat-box {
+			flex-grow: 1;
+			overflow-y: scroll;
+			padding: 10px;
+		}
+		.chat-box p {
+			margin: 0;
+			padding: 5px;
+			border-radius: 5px;
+			background-color: #dcf8c6;
+			display: inline-block;
+			max-width: 80%;
+			word-break: break-all;
+			margin-bottom: 10px;
+			align-self: flex-end;
+		}
+		.chat-box p.sent {
+			background-color: #e5e5ea;
+			align-self: flex-start;
+		}
+		.input-box {
+			display: flex;
+			align-items: center;
+			margin-top: 10px;
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			padding: 10px;
+			background-color: #fff;
+			box-shadow: 0px -2px 10px rgba(0,0,0,0.3);
+		}
+		.input-box input[type="text"] {
+			flex: 1;
+			padding: 10px;
+			font-size: 16px;
+			border: none;
+			border-radius: 5px;
+			background-color: #f2f2f2;
+		}
+		.input-box button {
+			padding: 10px;
+			font-size: 16px;
+			border: none;
+			border-radius: 5px;
+			background-color: #0099ff;
+			color: #fff;
+			margin-left: 10px;
+			cursor: pointer;
+		}
+		.emoji-btn {
+			font-size: 25px;
+			margin-left: 10px;
+			cursor: pointer;
+		}
+		.emoji-picker {
+			position: absolute;
+			bottom: 60px;
+			right: 10px;
+			display: none;
+			z-index: 1;
+		}
+		.emoji-picker .emoji {
+			display: inline-block;
+			margin: 5px;
+			font-size: 20px;
+			cursor: pointer;
+		}
+		@media (max-width: 767px) {
+			.chat-container {
+				height: calc(100vh - 60px);
+			}
+			.input-box {
+				padding: 5px;
+			}
+			.input-box input[type="text"] {
+				font-size: 14px;
+			}
+			.input-box button {
+				padding: 5px;
+				font-size: 14px;
+			}
+			.emoji-btn {
+				font-size: 20px;
+			}
+			.emoji-picker {
+				bottom: 50px;
+				right: 5px;
+			}
+			.emoji-picker .emoji {
+				font-size: 18px;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="chat-container">
+		<div class="chat-box">
+			<p class="sent">Hi, how are you?</p><br>
+			<p class="sent">What are you up to today? 😊</p>
+			<p>Same here, just catching up on some work. 😅</p>
+		</div>
+		<div class="input-box">
+			<input type="text" id="message-input" placeholder="Type your message here...">
+			<button id="send-button">Send</button>
+			<span class="emoji-btn">&#x1F60A;</span>
+			<div class="emoji-picker">
+				<span class="emoji">&#x1F60A;</span>
+				<span class="emoji">&#x1F601;</span>
+				<span class="emoji">&#x1F602;</span>
+				<span class="emoji">&#x1F603;</span>
+				<span class="emoji">&#x1F604;</span>
+				<span class="emoji">&#x1F605;</span>
+				<span class="emoji">&#x1F606;</span>
+				<span class="emoji">&#x1F607;</span>
+				<span class="emoji">&#x1F608;</span>
+				<span class="emoji">&#x1F609;</span>
+				<span class="emoji">&#x1F60B;</span>
+				<span class="emoji">&#x1F60C;</span>
+				<span class="emoji">&#x1F60D;</span>
+				<span class="emoji">&#x1F60E;</span>
+				<span class="emoji">&#x1F60F;</span>
+			</div>
+		</div>
+	</div>
+	<script>
+		const messageInput = document.getElementById('message-input');
+		const sendButton = document.getElementById('send-button');
+		const chatBox = document.querySelector('.chat-box');
+		const emojiPicker = document.querySelector('.emoji-picker');
+		const emojiBtn = document.querySelector('.emoji-btn');
+		const emojis = document.querySelectorAll('.emoji');
+
+		sendButton.addEventListener('click', () => {
+			if (messageInput.value) {
+				const newMessage = document.createElement('p');
+				newMessage.innerHTML = messageInput.value.replace(/([\u2700-\u27BF]|[\uD83C][\uDDE8-\uDDFF]|[\uD83D][\uDC00-\uDE4F]|[\uD83D][\uDE80-\uDEFF])/g, '<span class="emoji">$1</span>');
+				newMessage.classList.add('sent');
+				chatBox.appendChild(newMessage);
+				messageInput.value = '';
+			}
+		});
+
+		messageInput.addEventListener('keyup', event => {
+			if (event.key === 'Enter') {
+				sendButton.click();
+			}
+		});
+
+		emojiBtn.addEventListener('click', () => {
+			emojiPicker.style.display = emojiPicker.style.display === 'none' ? 'block' : 'none';
+			messageInput.focus();
+		});
+
+		emojis.forEach(emoji => {
+			emoji.addEventListener('click', () => {
+				messageInput.value += emoji.innerHTML;
+				messageInput.focus();
+			});
+		});
+	</script>
+</body>
+</html>
